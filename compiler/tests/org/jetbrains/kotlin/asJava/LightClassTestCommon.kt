@@ -25,13 +25,13 @@ import java.io.File
 import java.util.regex.Pattern
 
 object LightClassTestCommon {
-    private val SUBJECT_FQ_NAME_PATTERN = Pattern.compile("^//\\s*(.*)$", Pattern.MULTILINE)
+    public val SUBJECT_FQ_NAME_PATTERN = Pattern.compile("^//\\s*(.*)$", Pattern.MULTILINE)
 
     @JvmOverloads
     fun testLightClass(
             testDataFile: File,
             findLightClass: (String) -> PsiClass?,
-            normalizeText: (String) -> String = { it }
+            normalizeText: (PsiClass, String) -> String = { clazz, text -> text }
     ) {
         val text = FileUtil.loadFile(testDataFile, true)
         val matcher = SUBJECT_FQ_NAME_PATTERN.matcher(text)
@@ -44,7 +44,7 @@ object LightClassTestCommon {
         KotlinTestUtils.assertEqualsToFile(KotlinTestUtils.replaceExtension(testDataFile, "java"), actual)
     }
 
-    private fun actualText(fqName: String?, lightClass: PsiClass?, normalizeText: (String) -> String): String {
+    private fun actualText(fqName: String?, lightClass: PsiClass?, normalizeText: (PsiClass, String) -> String): String {
         if (lightClass == null) {
             return "<not generated>"
         }
@@ -55,7 +55,7 @@ object LightClassTestCommon {
 
         val buffer = StringBuilder()
         (delegate as ClsElementImpl).appendMirrorText(0, buffer)
-        val actual = normalizeText(buffer.toString())
+        val actual = normalizeText(lightClass, buffer.toString())
         return actual
     }
 }
