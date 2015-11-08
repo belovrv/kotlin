@@ -16,7 +16,7 @@
 
 package org.jetbrains.kotlin.rmi.kotlinr
 
-import org.jetbrains.kotlin.incremental.components.LookupHolder
+import org.jetbrains.kotlin.incremental.components.LookupInfo
 import org.jetbrains.kotlin.incremental.components.LookupTracker
 import org.jetbrains.kotlin.load.kotlin.incremental.components.IncrementalCompilationComponents
 import org.jetbrains.kotlin.load.kotlin.incremental.components.JvmPackagePartProto
@@ -66,7 +66,7 @@ public class CompilerCallbackServicesFacadeServer(
 
     override fun lookupTracker_requiresPosition() = incrementalCompilationComponents!!.getLookupTracker().requiresPosition
 
-    override fun lookupTracker_record(lookups: Collection<LookupHolder>) {
+    override fun lookupTracker_record(lookups: Collection<LookupInfo>) {
         val lookupTracker = incrementalCompilationComponents!!.getLookupTracker()
 
         for (it in lookups) {

@@ -16,7 +16,7 @@
 
 package org.jetbrains.kotlin.rmi
 
-import org.jetbrains.kotlin.incremental.components.LookupHolder
+import org.jetbrains.kotlin.incremental.components.LookupInfo
 import org.jetbrains.kotlin.load.kotlin.incremental.components.JvmPackagePartProto
 import org.jetbrains.kotlin.modules.TargetId
 import java.rmi.Remote
@@ -74,7 +74,7 @@ public interface CompilerCallbackServicesFacade : Remote {
     fun lookupTracker_requiresPosition(): Boolean
 
     @Throws(RemoteException::class)
-    fun lookupTracker_record(lookups: Collection<LookupHolder>)
+    fun lookupTracker_record(lookups: Collection<LookupInfo>)
 
     @Throws(RemoteException::class)
     fun lookupTracker_isDoNothing(): Boolean

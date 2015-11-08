@@ -17,7 +17,7 @@
 package org.jetbrains.kotlin.jps.build
 
 import com.intellij.openapi.util.io.FileUtil
-import org.jetbrains.kotlin.incremental.components.LookupHolder
+import org.jetbrains.kotlin.incremental.components.LookupInfo
 import org.jetbrains.kotlin.incremental.components.LookupTracker
 import org.jetbrains.kotlin.incremental.components.Position
 import org.jetbrains.kotlin.incremental.components.ScopeKind
@@ -118,13 +118,13 @@ abstract class AbstractLookupTrackerTest : AbstractIncrementalJpsTest(
 }
 
 class TestLookupTracker : LookupTracker {
-    val lookups = arrayListOf<LookupHolder>()
+    val lookups = arrayListOf<LookupInfo>()
 
     override val requiresPosition: Boolean
         get() = true
 
     override fun record(filePath: String, position: Position, scopeFqName: String, scopeKind: ScopeKind, name: String) {
-        lookups.add(LookupHolder(filePath, position, scopeFqName, scopeKind, name))
+        lookups.add(LookupInfo(filePath, position, scopeFqName, scopeKind, name))
     }
 }
 

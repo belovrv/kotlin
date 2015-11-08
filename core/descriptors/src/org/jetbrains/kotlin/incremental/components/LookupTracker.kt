@@ -46,7 +46,7 @@ public enum class ScopeKind {
     CLASSIFIER
 }
 
-class LookupHolder(
+data class LookupInfo(
         val filePath: String,
         val position: Position,
         val scopeFqName: String,
