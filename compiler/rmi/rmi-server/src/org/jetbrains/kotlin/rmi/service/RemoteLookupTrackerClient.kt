@@ -43,10 +43,12 @@ class RemoteLookupTrackerClient(val facade: CompilerCallbackServicesFacade, val 
     }
 
     private fun flush() {
-        if (isDoNothing) return
+        if (isDoNothing || lookups.isEmpty()) return
 
         profiler.withMeasure(this) {
             facade.lookupTracker_record(lookups)
         }
+
+        lookups.clear()
     }
 }
