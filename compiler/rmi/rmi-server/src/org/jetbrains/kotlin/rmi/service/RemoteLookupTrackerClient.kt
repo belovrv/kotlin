@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.rmi.Profiler
 class RemoteLookupTrackerClient(val facade: CompilerCallbackServicesFacade, val eventManger: EventManger, val profiler: Profiler = DummyProfiler()) : LookupTracker {
     private val isDoNothing = profiler.withMeasure(this) { facade.lookupTracker_isDoNothing() }
 
-    private val lookups = arrayListOf<LookupInfo>()
+    private val lookups = hashSetOf<LookupInfo>()
 
     override val requiresPosition: Boolean = profiler.withMeasure(this) { facade.lookupTracker_requiresPosition() }
 
