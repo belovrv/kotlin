@@ -523,7 +523,9 @@ public class BodyResolver {
             if (body != null) {
                 PreliminaryDeclarationVisitor.Companion.createForDeclaration(
                         (KtDeclaration) anonymousInitializer.getParent().getParent(), trace);
-                expressionTypingServices.getType(scopeForInitializers, body, NO_EXPECTED_TYPE, outerDataFlowInfo, trace);
+                expressionTypingServices.getTypeInfo(
+                        scopeForInitializers, body, NO_EXPECTED_TYPE, outerDataFlowInfo, trace, /*isStatement = */true
+                );
             }
             processModifiersOnInitializer(anonymousInitializer, scopeForInitializers);
         }
