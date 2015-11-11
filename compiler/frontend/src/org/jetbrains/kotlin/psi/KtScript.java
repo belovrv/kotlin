@@ -19,13 +19,30 @@ package org.jetbrains.kotlin.psi;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.kotlin.name.FqName;
+import org.jetbrains.kotlin.psi.stubs.KotlinScriptStub;
+import org.jetbrains.kotlin.psi.stubs.elements.KtStubElementTypes;
+import org.jetbrains.kotlin.resolve.ScriptNameUtil;
 
 import java.util.List;
 
-public class KtScript extends KtDeclarationImpl implements KtDeclarationContainer {
+public class KtScript extends KtDeclarationStub<KotlinScriptStub> implements KtDeclarationContainer {
 
     public KtScript(@NotNull ASTNode node) {
         super(node);
+    }
+
+    public KtScript(@NotNull KotlinScriptStub stub) {
+        super(stub, KtStubElementTypes.SCRIPT);
+    }
+
+    @NotNull
+    public FqName getScriptClassFqName() {
+        KotlinScriptStub stub = getStub();
+        if (stub != null) {
+            return stub.getScriptClassFqName();
+        }
+        return ScriptNameUtil.classNameForScript(this);
     }
 
     @NotNull
