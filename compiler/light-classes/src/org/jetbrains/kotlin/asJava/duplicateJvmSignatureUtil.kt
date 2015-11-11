@@ -43,6 +43,8 @@ public fun getJvmSignatureDiagnostics(element: PsiElement, otherDiagnostics: Dia
     }
 
     fun doGetDiagnostics(): Diagnostics? {
+        if ((element.containingFile as? KtFile)?.isScript ?: false) return null
+
         var parent = element.getParent()
         if (element is KtPropertyAccessor) {
             parent = parent?.getParent()

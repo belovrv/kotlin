@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.resolve;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.name.FqName;
+import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.parsing.KotlinScriptDefinition;
 import org.jetbrains.kotlin.parsing.KotlinScriptDefinitionProvider;
 import org.jetbrains.kotlin.psi.KtFile;
@@ -30,26 +31,6 @@ public class ScriptNameUtil {
 
     @NotNull
     public static FqName classNameForScript(KtScript script) {
-        KtFile file = script.getContainingKtFile();
-        KotlinScriptDefinition scriptDefinition = KotlinScriptDefinitionProvider.getInstance(file.getProject()).findScriptDefinition(file);
-
-        String name = file.getName();
-        int index = name.lastIndexOf('/');
-        if(index != -1)
-            name = name.substring(index+1);
-        if(name.endsWith(scriptDefinition.getExtension()))
-            name = name.substring(0, name.length()-scriptDefinition.getExtension().length());
-        else {
-            index = name.indexOf('.');
-            if(index != -1)
-                name = name.substring(0,index);
-        }
-        name = Character.toUpperCase(name.charAt(0)) + (name.length() == 0 ? "" : name.substring(1));
-        name = name.replace('.', '_');
-        KtPackageDirective directive = file.getPackageDirective();
-        if(directive != null && directive.getQualifiedName().length() > 0) {
-            name = directive.getQualifiedName() + "." + name;
-        }
-        return new FqName(name);
+        return FqName.topLevel(Name.identifier("Script"));
     }
 }
