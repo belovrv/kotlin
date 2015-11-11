@@ -571,6 +571,12 @@ public class PsiCheckerTestGenerated extends AbstractPsiCheckerTest {
             KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("idea/testData/checker/scripts"), Pattern.compile("^(.+)\\.kts$"), true);
         }
 
+        @TestMetadata("if.kts")
+        public void testIf() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/checker/scripts/if.kts");
+            doTest(fileName);
+        }
+
         @TestMetadata("simple.kts")
         public void testSimple() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("idea/testData/checker/scripts/simple.kts");
