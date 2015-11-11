@@ -201,7 +201,8 @@ public class CallCompleter(
         val receiverType = if (getExtensionReceiver().exists()) getExtensionReceiver().getType() else null
         val errorData = InferenceErrorData.create(
                 getCandidateDescriptor(), getConstraintSystem()!!, valueArgumentsCheckingResult.argumentTypes,
-                receiverType, context.expectedType)
+                receiverType, context.expectedType, context.call
+        )
         tracing.typeInferenceFailed(context.trace, errorData)
 
         addStatus(ResolutionStatus.OTHER_ERROR)
