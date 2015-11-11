@@ -353,8 +353,10 @@ public class ReplInterpreter {
 
             earlierLines.add(new EarlierLine(line, scriptDescriptor, scriptClass, scriptInstance, scriptClassType));
 
-            KotlinType returnType = scriptDescriptor.getScriptCodeDescriptor().getReturnType();
-            return LineResult.successful(rv, returnType != null && KotlinBuiltIns.isUnit(returnType));
+            //TODO_R:
+            //KotlinType returnType = scriptDescriptor.getScriptCodeDescriptor().getReturnType();
+            //return LineResult.successful(rv, returnType != null && KotlinBuiltIns.isUnit(returnType));
+            return LineResult.successful(null, false);
         }
         catch (Throwable e) {
             @SuppressWarnings("UseOfSystemOutOrSystemErr")

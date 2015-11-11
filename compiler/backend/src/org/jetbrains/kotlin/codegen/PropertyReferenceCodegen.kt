@@ -56,7 +56,7 @@ public class PropertyReferenceCodegen(
             when {
                 dispatchReceiver is ScriptReceiver -> {
                     // TODO: fix receiver for scripts, see ScriptReceiver#getType
-                    dispatchReceiver.declarationDescriptor.classDescriptor.defaultType
+                    dispatchReceiver.declarationDescriptor.defaultType
                 }
                 dispatchReceiver.exists() -> dispatchReceiver.type
                 else -> null

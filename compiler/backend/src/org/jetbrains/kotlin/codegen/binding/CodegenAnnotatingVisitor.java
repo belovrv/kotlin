@@ -163,8 +163,7 @@ class CodegenAnnotatingVisitor extends KtVisitorVoid {
         if (file.isScript()) {
             // TODO: replace with visitScript override
             //noinspection ConstantConditions
-            ClassDescriptor classDescriptor = bindingContext.get(CLASS_FOR_SCRIPT, bindingContext.get(SCRIPT, file.getScript()));
-            classStack.push(classDescriptor);
+            classStack.push(bindingContext.get(SCRIPT, file.getScript()));
             //noinspection ConstantConditions
             nameStack.push(asmTypeForScriptPsi(bindingContext, file.getScript()).getInternalName());
         }
@@ -386,7 +385,7 @@ class CodegenAnnotatingVisitor extends KtVisitorVoid {
 
         String peek = peekFromStack(nameStack);
         String name = safeIdentifier(descriptor.getName()).asString();
-        if (containingDeclaration instanceof ClassDescriptor || containingDeclaration instanceof ScriptDescriptor) {
+        if (containingDeclaration instanceof ClassDescriptor) {
             return peek + '$' + name;
         }
         else if (containingDeclaration instanceof PackageFragmentDescriptor) {

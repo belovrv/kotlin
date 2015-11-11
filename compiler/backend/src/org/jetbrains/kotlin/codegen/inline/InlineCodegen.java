@@ -598,17 +598,15 @@ public class InlineCodegen extends CallGenerator {
 
         CodegenContext parent = getContext(descriptor.getContainingDeclaration(), state, sourceFile);
 
-        if (descriptor instanceof ClassDescriptor) {
-            OwnerKind kind = DescriptorUtils.isInterface(descriptor) ? OwnerKind.DEFAULT_IMPLS : OwnerKind.IMPLEMENTATION;
-            return parent.intoClass((ClassDescriptor) descriptor, kind, state);
-        }
-        else if (descriptor instanceof ScriptDescriptor) {
-            ClassDescriptor classDescriptorForScript = state.getBindingContext().get(CLASS_FOR_SCRIPT, (ScriptDescriptor) descriptor);
-            assert classDescriptorForScript != null : "Can't find class for script: " + descriptor;
+        if (descriptor instanceof ScriptDescriptor) {
             List<ScriptDescriptor> earlierScripts = state.getEarlierScriptsForReplInterpreter();
             return parent.intoScript((ScriptDescriptor) descriptor,
                                      earlierScripts == null ? Collections.emptyList() : earlierScripts,
-                                     classDescriptorForScript);
+                                     (ClassDescriptor) descriptor, state.getTypeMapper());
+        }
+        else if (descriptor instanceof ClassDescriptor) {
+            OwnerKind kind = DescriptorUtils.isInterface(descriptor) ? OwnerKind.DEFAULT_IMPLS : OwnerKind.IMPLEMENTATION;
+            return parent.intoClass((ClassDescriptor) descriptor, kind, state);
         }
         else if (descriptor instanceof FunctionDescriptor) {
             return parent.intoFunction((FunctionDescriptor) descriptor);

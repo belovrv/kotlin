@@ -24,7 +24,6 @@ import org.jetbrains.kotlin.codegen.context.MethodContext;
 import org.jetbrains.kotlin.codegen.context.ScriptContext;
 import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.descriptors.ClassDescriptor;
-import org.jetbrains.kotlin.descriptors.PropertyDescriptor;
 import org.jetbrains.kotlin.descriptors.ScriptDescriptor;
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor;
 import org.jetbrains.kotlin.psi.*;
@@ -55,19 +54,16 @@ public class ScriptCodegen extends MemberCodegen<KtScript> {
         ScriptDescriptor scriptDescriptor = bindingContext.get(BindingContext.SCRIPT, declaration);
         assert scriptDescriptor != null;
 
-        ClassDescriptor classDescriptorForScript = bindingContext.get(CLASS_FOR_SCRIPT, scriptDescriptor);
-        assert classDescriptorForScript != null;
-
         Type classType = asmTypeForScriptDescriptor(bindingContext, scriptDescriptor);
 
-        ClassBuilder builder = state.getFactory().newVisitor(JvmDeclarationOriginKt.OtherOrigin(declaration, classDescriptorForScript),
+        ClassBuilder builder = state.getFactory().newVisitor(JvmDeclarationOriginKt.OtherOrigin(declaration, scriptDescriptor),
                                                              classType, declaration.getContainingFile());
         List<ScriptDescriptor> earlierScripts = state.getEarlierScriptsForReplInterpreter();
         ScriptContext scriptContext = parentContext.intoScript(
                 scriptDescriptor,
                 earlierScripts == null ? Collections.<ScriptDescriptor>emptyList() : earlierScripts,
-                classDescriptorForScript
-        );
+                scriptDescriptor,
+                state.getTypeMapper());
         return new ScriptCodegen(declaration, state, scriptContext, builder);
     }
 
@@ -105,7 +101,7 @@ public class ScriptCodegen extends MemberCodegen<KtScript> {
         genMembers();
         genFieldsForParameters(scriptDescriptor, v);
         genConstructor(scriptDescriptor, context.getContextDescriptor(), v,
-                       context.intoFunction(scriptDescriptor.getScriptCodeDescriptor()));
+                       context.intoFunction(scriptDescriptor.getUnsubstitutedPrimaryConstructor()));
     }
 
     @Override
@@ -120,17 +116,12 @@ public class ScriptCodegen extends MemberCodegen<KtScript> {
             @NotNull MethodContext methodContext
     ) {
         //noinspection ConstantConditions
-        Type blockType = typeMapper.mapType(scriptDescriptor.getScriptCodeDescriptor().getReturnType());
-
-        PropertyDescriptor scriptResultProperty = scriptDescriptor.getScriptResultProperty();
-        classBuilder.newField(JvmDeclarationOriginKt.OtherOrigin(scriptResultProperty),
-                              ACC_PUBLIC | ACC_FINAL, scriptResultProperty.getName().asString(),
-                              blockType.getDescriptor(), null, null);
+        Type blockType = Type.VOID_TYPE;
 
         JvmMethodSignature jvmSignature = typeMapper.mapScriptSignature(scriptDescriptor, context.getEarlierScripts());
 
         MethodVisitor mv = classBuilder.newMethod(
-                JvmDeclarationOriginKt.OtherOrigin(scriptDeclaration, scriptDescriptor.getClassDescriptor().getUnsubstitutedPrimaryConstructor()),
+                JvmDeclarationOriginKt.OtherOrigin(scriptDeclaration, scriptDescriptor.getUnsubstitutedPrimaryConstructor()),
                 ACC_PUBLIC, jvmSignature.getAsmMethod().getName(), jvmSignature.getAsmMethod().getDescriptor(),
                 null, null);
 
@@ -156,8 +147,9 @@ public class ScriptCodegen extends MemberCodegen<KtScript> {
             Type[] argTypes = jvmSignature.getAsmMethod().getArgumentTypes();
             int add = 0;
 
-            for (int i = 0; i < scriptDescriptor.getScriptCodeDescriptor().getValueParameters().size(); i++) {
-                ValueParameterDescriptor parameter = scriptDescriptor.getScriptCodeDescriptor().getValueParameters().get(i);
+            List<ValueParameterDescriptor> valueParameters = scriptDescriptor.getUnsubstitutedPrimaryConstructor().getValueParameters();
+            for (int i = 0; i < valueParameters.size(); i++) {
+                ValueParameterDescriptor parameter = valueParameters.get(i);
                 frameMap.enter(parameter, argTypes[i + add]);
             }
 
@@ -171,7 +163,7 @@ public class ScriptCodegen extends MemberCodegen<KtScript> {
                 iv.putfield(classType.getInternalName(), context.getScriptFieldName(earlierScript), earlierClassType.getDescriptor());
             }
 
-            for (ValueParameterDescriptor parameter : scriptDescriptor.getScriptCodeDescriptor().getValueParameters()) {
+            for (ValueParameterDescriptor parameter : valueParameters) {
                 Type parameterType = typeMapper.mapType(parameter.getType());
                 iv.load(0, classType);
                 iv.load(offset, parameterType);
@@ -189,14 +181,7 @@ public class ScriptCodegen extends MemberCodegen<KtScript> {
             });
 
             StackValue stackValue = codegen.gen(scriptDeclaration.getBlockExpression());
-            if (stackValue.type != Type.VOID_TYPE) {
-                StackValue.Field resultValue = StackValue
-                        .field(blockType, classType, ScriptDescriptor.LAST_EXPRESSION_VALUE_FIELD_NAME, false, StackValue.LOCAL_0);
-                resultValue.store(stackValue, iv);
-            }
-            else {
-                stackValue.put(blockType, iv);
-            }
+            stackValue.put(blockType, iv);
 
             iv.areturn(Type.VOID_TYPE);
         }
@@ -212,7 +197,7 @@ public class ScriptCodegen extends MemberCodegen<KtScript> {
             classBuilder.newField(NO_ORIGIN, access, context.getScriptFieldName(earlierScript), earlierClassName.getDescriptor(), null, null);
         }
 
-        for (ValueParameterDescriptor parameter : script.getScriptCodeDescriptor().getValueParameters()) {
+        for (ValueParameterDescriptor parameter : script.getUnsubstitutedPrimaryConstructor().getValueParameters()) {
             Type parameterType = typeMapper.mapType(parameter);
             int access = ACC_PUBLIC | ACC_FINAL;
             classBuilder.newField(JvmDeclarationOriginKt.OtherOrigin(parameter), access, parameter.getName().getIdentifier(), parameterType.getDescriptor(), null, null);

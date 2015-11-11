@@ -88,6 +88,27 @@ public class LazyDeclarationResolver {
     }
 
     @NotNull
+    public ScriptDescriptor getScriptDescriptor(@NotNull KtScript script, @NotNull LookupLocation location) {
+        MemberScope scope = getMemberScopeDeclaredIn(script, location);
+
+        //TODO_R:
+        ClassifierDescriptor scopeDescriptor = scope.getContributedClassifier(script.getScriptClassFqName().shortName(), location);
+        DeclarationDescriptor descriptor = getBindingContext().get(BindingContext.SCRIPT, script);
+
+        if (descriptor == null) {
+            throw new IllegalArgumentException(
+                    String.format("Could not find a classifier for %s.\n" +
+                                  "Found descriptor: %s (%s).\n",
+                                  PsiUtilsKt.getElementTextWithContext(script),
+                                  scopeDescriptor != null ? DescriptorRenderer.DEBUG_TEXT.render(scopeDescriptor) : "null",
+                                  scopeDescriptor != null ? (scopeDescriptor.getContainingDeclaration().getClass()) : null));
+        }
+
+        return (ScriptDescriptor) descriptor;
+
+    }
+
+    @NotNull
     private BindingContext getBindingContext() {
         return trace.getBindingContext();
     }
@@ -210,7 +231,7 @@ public class LazyDeclarationResolver {
 
             @Override
             public DeclarationDescriptor visitScript(@NotNull KtScript script, Void data) {
-                return topLevelDescriptorProvider.getScriptDescriptor(script);
+                return getScriptDescriptor(script, lookupLocationFor(script, true));
             }
 
             @Override
@@ -238,7 +259,11 @@ public class LazyDeclarationResolver {
         else {
             if (parentDeclaration instanceof KtClassOrObject) {
                 return getClassDescriptor((KtClassOrObject) parentDeclaration, location).getUnsubstitutedMemberScope();
-            } else {
+            }
+            else if (parentDeclaration instanceof KtScript) {
+                return getScriptDescriptor((KtScript) parentDeclaration, location).getUnsubstitutedMemberScope();
+            }
+            else {
                 throw new IllegalStateException("Don't call this method for local declarations: " + declaration + "\n" +
                                                 PsiUtilsKt.getElementTextWithContext(declaration));
             }

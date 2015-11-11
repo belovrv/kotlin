@@ -91,9 +91,7 @@ public class CodegenBinding {
 
     @NotNull
     public static Type asmTypeForScriptDescriptor(BindingContext bindingContext, @NotNull ScriptDescriptor scriptDescriptor) {
-        ClassDescriptor classDescriptor = bindingContext.get(CLASS_FOR_SCRIPT, scriptDescriptor);
-        //noinspection ConstantConditions
-        return getAsmType(bindingContext, classDescriptor);
+        return getAsmType(bindingContext, scriptDescriptor);
     }
 
     @NotNull
@@ -163,8 +161,9 @@ public class CodegenBinding {
             @NotNull Type asmType,
             @NotNull JvmFileClassesProvider fileClassesManager
     ) {
-        KtElement element = (KtElement) descriptorToDeclaration(classDescriptor);
-        assert element != null : "No source element for " + classDescriptor;
+        //TODO_R:
+        //KtElement element = (KtElement) descriptorToDeclaration(classDescriptor);
+        //assert element != null : "No source element for " + classDescriptor;
 
         MutableClosure closure = new MutableClosure(classDescriptor, enclosing);
 
@@ -207,16 +206,7 @@ public class CodegenBinding {
             throw new IllegalStateException("Script descriptor is not found for PSI: " + PsiUtilsKt.getElementTextWithContext(script));
         }
 
-        String simpleName = asmType.getInternalName().substring(asmType.getInternalName().lastIndexOf('/') + 1);
-        ClassDescriptorImpl classDescriptor =
-                new ClassDescriptorImpl(descriptor, Name.special("<script-" + simpleName + ">"), Modality.FINAL,
-                                        Collections.singleton(DescriptorUtilsKt.getBuiltIns(descriptor).getAnyType()),
-                                        KotlinSourceElementKt.toSourceElement(script));
-        classDescriptor.initialize(MemberScope.Empty.INSTANCE, Collections.<ConstructorDescriptor>emptySet(), null);
-
-        recordClosure(trace, classDescriptor, null, asmType, fileClassesManager);
-
-        trace.record(CLASS_FOR_SCRIPT, descriptor, classDescriptor);
+        recordClosure(trace, descriptor, null, asmType, fileClassesManager);
     }
 
     @NotNull

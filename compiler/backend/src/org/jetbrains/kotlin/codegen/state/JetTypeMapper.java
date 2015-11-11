@@ -166,11 +166,11 @@ public class JetTypeMapper {
             String packageMemberOwner = internalNameForPackageMemberOwner((CallableMemberDescriptor) descriptor, publicFacade);
             return Type.getObjectType(packageMemberOwner);
         }
-        else if (container instanceof ClassDescriptor) {
-            return mapClass((ClassDescriptor) container);
-        }
         else if (container instanceof ScriptDescriptor) {
             return asmTypeForScriptDescriptor(bindingContext, (ScriptDescriptor) container);
+        }
+        else if (container instanceof ClassDescriptor) {
+            return mapClass((ClassDescriptor) container);
         }
         else {
             throw new UnsupportedOperationException("Don't know how to map owner for " + descriptor);
@@ -1392,12 +1392,10 @@ public class JetTypeMapper {
         sw.writeParametersStart();
 
         for (ScriptDescriptor importedScript : importedScripts) {
-            ClassDescriptor descriptor = bindingContext.get(CLASS_FOR_SCRIPT, importedScript);
-            assert descriptor != null : "Script not found: " + importedScript;
-            writeParameter(sw, descriptor.getDefaultType());
+            writeParameter(sw, importedScript.getDefaultType());
         }
 
-        for (ValueParameterDescriptor valueParameter : script.getScriptCodeDescriptor().getValueParameters()) {
+        for (ValueParameterDescriptor valueParameter : script.getUnsubstitutedPrimaryConstructor().getValueParameters()) {
             writeParameter(sw, valueParameter.getType());
         }
 

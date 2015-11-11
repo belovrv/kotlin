@@ -358,6 +358,17 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
     }
 
     @Override
+    public StackValue visitAnonymousInitializer(@NotNull KtClassInitializer initializer, StackValue data) {
+        if (initializer.getDeclaration() instanceof KtScript) {
+            KtExpression body = initializer.getBody();
+            if (body != null) {
+                return body.accept(this, data);
+            }
+        }
+        return super.visitAnonymousInitializer(initializer, data);
+    }
+
+    @Override
     public StackValue visitSuperExpression(@NotNull KtSuperExpression expression, StackValue data) {
         return StackValue.thisOrOuter(this, getSuperCallLabelTarget(context, expression), true, false);
     }
@@ -1967,21 +1978,6 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
         if (localOrCaptured != null) {
             return localOrCaptured;
         }
-
-        DeclarationDescriptor container = descriptor.getContainingDeclaration();
-        if (descriptor instanceof ValueParameterDescriptor && container instanceof ScriptCodeDescriptor) {
-            ScriptCodeDescriptor scriptCodeDescriptor = (ScriptCodeDescriptor) container;
-            ScriptDescriptor scriptDescriptor = (ScriptDescriptor) scriptCodeDescriptor.getContainingDeclaration();
-            Type scriptClassType = asmTypeForScriptDescriptor(bindingContext, scriptDescriptor);
-            ValueParameterDescriptor valueParameterDescriptor = (ValueParameterDescriptor) descriptor;
-            ClassDescriptor scriptClass = bindingContext.get(CLASS_FOR_SCRIPT, scriptDescriptor);
-            //noinspection ConstantConditions
-            StackValue script = StackValue.thisOrOuter(this, scriptClass, false, false);
-            Type fieldType = typeMapper.mapType(valueParameterDescriptor);
-            return StackValue.field(fieldType, scriptClassType, valueParameterDescriptor.getName().getIdentifier(), false, script,
-                                    valueParameterDescriptor);
-        }
-
         throw new UnsupportedOperationException("don't know how to generate reference " + descriptor);
     }
 

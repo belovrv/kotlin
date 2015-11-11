@@ -69,12 +69,16 @@ public class LazyTopDownAnalyzer(
                     throw IllegalArgumentException("Unsupported declaration: " + dcl + " " + dcl.getText())
                 }
 
+                override fun visitScript(script: KtScript) {
+                    visitKtFile(script.getContainingKtFile())
+                }
+
                 override fun visitKtFile(file: KtFile) {
                     if (file.isScript()) {
                         val script = file.getScript() ?: throw AssertionError("getScript() is null for file: $file")
 
                         DescriptorResolver.registerFileInPackage(trace, file)
-                        c.getScripts().put(script, topLevelDescriptorProvider.getScriptDescriptor(script))
+                        registerDeclarations(script.blockExpression.children.filterIsInstance<KtDeclaration>())
                     }
                     else {
                         val packageDirective = file.getPackageDirective()
@@ -158,7 +162,7 @@ public class LazyTopDownAnalyzer(
                 }
 
                 override fun visitAnonymousInitializer(initializer: KtClassInitializer) {
-                    val classOrObject = PsiTreeUtil.getParentOfType<KtClassOrObject>(initializer, javaClass<KtClassOrObject>())!!
+                    val classOrObject: KtDeclaration = PsiTreeUtil.getParentOfType<KtClassOrObject>(initializer, javaClass<KtClassOrObject>()) ?: PsiTreeUtil.getParentOfType<KtScript>(initializer, javaClass<KtScript>())!!
                     c.getAnonymousInitializers().put(initializer, lazyDeclarationResolver.resolveToDescriptor(classOrObject) as ClassDescriptorWithResolutionScopes)
                 }
 

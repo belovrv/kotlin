@@ -20,24 +20,25 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.codegen.OwnerKind;
 import org.jetbrains.kotlin.codegen.binding.MutableClosure;
+import org.jetbrains.kotlin.codegen.state.JetTypeMapper;
 import org.jetbrains.kotlin.descriptors.ClassDescriptor;
 import org.jetbrains.kotlin.descriptors.ScriptDescriptor;
 
 import java.util.List;
 
-public class ScriptContext extends FieldOwnerContext<ClassDescriptor> {
+public class ScriptContext extends ClassContext {
     private final ScriptDescriptor scriptDescriptor;
     private final List<ScriptDescriptor> earlierScripts;
 
     public ScriptContext(
+            @NotNull JetTypeMapper typeMapper,
             @NotNull ScriptDescriptor scriptDescriptor,
             @NotNull List<ScriptDescriptor> earlierScripts,
             @NotNull ClassDescriptor contextDescriptor,
-            @NotNull OwnerKind contextKind,
             @Nullable CodegenContext parentContext,
             @Nullable MutableClosure closure
     ) {
-        super(contextDescriptor, contextKind, parentContext, closure, contextDescriptor, null);
+        super(typeMapper, contextDescriptor, OwnerKind.IMPLEMENTATION, parentContext, null);
         this.scriptDescriptor = scriptDescriptor;
         this.earlierScripts = earlierScripts;
     }
