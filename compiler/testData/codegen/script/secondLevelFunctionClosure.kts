@@ -6,6 +6,6 @@ if (true) {
     x = foo()
 }
 
-x
+val rv = x
 
 // expected: rv: 50

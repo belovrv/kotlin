@@ -5,6 +5,6 @@ if (true) {
     x = foo(9)
 }
 
-x
+val rv = x
 
 // expected: rv: 29
