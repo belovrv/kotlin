@@ -563,6 +563,21 @@ public class PsiCheckerTestGenerated extends AbstractPsiCheckerTest {
         }
     }
 
+    @TestMetadata("idea/testData/checker/scripts")
+    @TestDataPath("$PROJECT_ROOT")
+    @RunWith(JUnit3RunnerWithInners.class)
+    public static class Scripts extends AbstractPsiCheckerTest {
+        public void testAllFilesPresentInScripts() throws Exception {
+            KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("idea/testData/checker/scripts"), Pattern.compile("^(.+)\\.kts$"), true);
+        }
+
+        @TestMetadata("simple.kts")
+        public void testSimple() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/checker/scripts/simple.kts");
+            doTest(fileName);
+        }
+    }
+
     @TestMetadata("idea/testData/checker/duplicateJvmSignature")
     @TestDataPath("$PROJECT_ROOT")
     @RunWith(JUnit3RunnerWithInners.class)
