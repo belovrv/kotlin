@@ -31,7 +31,7 @@ public class LazyScriptDescriptor(
         private val resolveSession: ResolveSession,
         containingDeclaration: DeclarationDescriptor,
         name: Name,
-        private val scriptInfo: JetScriptInfo
+        internal val scriptInfo: JetScriptInfo
 ) : ScriptDescriptor, LazyClassDescriptor(
         resolveSession,
         containingDeclaration,

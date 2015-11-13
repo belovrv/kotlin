@@ -75,7 +75,10 @@ public class LazyDeclarationResolver {
     }
 
     @NotNull
-    private ClassDescriptor findClassDescriptor(@NotNull KtNamedDeclaration classObjectOrScript, @NotNull LookupLocation location) {
+    private ClassDescriptor findClassDescriptor(
+            @NotNull KtNamedDeclaration classObjectOrScript,
+            @NotNull LookupLocation location
+    ) {
         MemberScope scope = getMemberScopeDeclaredIn(classObjectOrScript, location);
 
         // Why not use the result here. Because it may be that there is a redeclaration:

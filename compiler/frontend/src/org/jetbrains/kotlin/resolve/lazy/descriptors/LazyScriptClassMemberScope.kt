@@ -19,32 +19,94 @@ package org.jetbrains.kotlin.resolve.lazy.descriptors
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.descriptors.impl.ConstructorDescriptorImpl
+import org.jetbrains.kotlin.descriptors.impl.PropertyDescriptorImpl
+import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl
+import org.jetbrains.kotlin.incremental.components.LookupLocation
+import org.jetbrains.kotlin.incremental.components.NoLookupLocation
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.parsing.KotlinScriptDefinitionProvider
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.lazy.ResolveSession
 import org.jetbrains.kotlin.resolve.lazy.declarations.ClassMemberDeclarationProvider
+import org.jetbrains.kotlin.utils.toReadOnlyList
 
 public class LazyScriptClassMemberScope(
         private val resolveSession: ResolveSession,
         declarationProvider: ClassMemberDeclarationProvider,
-        thisClass: LazyClassDescriptor,
+        private val scriptDescriptor: LazyScriptDescriptor,
         trace: BindingTrace)
-: LazyClassMemberScope(resolveSession, declarationProvider, thisClass, trace) {
+: LazyClassMemberScope(resolveSession, declarationProvider, scriptDescriptor, trace) {
 
     override fun resolvePrimaryConstructor(): ConstructorDescriptor? {
-        val constructor = createConstructor(thisDescriptor, emptyList())
-        setDeferredReturnType(constructor)
-        return constructor
-    }
-
-    private fun createConstructor(scriptDescriptor: ClassDescriptor, valueParameters: List<ValueParameterDescriptor>): ConstructorDescriptorImpl {
-        return ConstructorDescriptorImpl.create(
+        val constructor = ConstructorDescriptorImpl.create(
                 scriptDescriptor,
                 Annotations.EMPTY,
                 true,
                 SourceElement.NO_SOURCE
-        ).initialize(
-                valueParameters,
+        )
+        constructor.initialize(
+                createScriptParameters(constructor),
                 Visibilities.PUBLIC
         )
+        setDeferredReturnType(constructor)
+        return constructor
+    }
+
+    private fun createScriptParameters(constructor: ConstructorDescriptorImpl): List<ValueParameterDescriptor> {
+        val file = scriptDescriptor.scriptInfo.script.getContainingKtFile()
+        val scriptDefinition = KotlinScriptDefinitionProvider.getInstance(file.project).findScriptDefinition(file)
+        return scriptDefinition.scriptParameters.mapIndexed { index, scriptParameter ->
+            ValueParameterDescriptorImpl(
+                    constructor, null, index, Annotations.EMPTY, scriptParameter.getName(), scriptParameter.getType(),
+                    /* declaresDefaultValue = */ false,
+                    /* isCrossinline = */ false,
+                    /* isNoinline = */ false,
+                    null, SourceElement.NO_SOURCE
+            )
+        }
+    }
+
+    override fun computeExtraDescriptors(location: LookupLocation): Collection<DeclarationDescriptor> {
+        return (super.computeExtraDescriptors(location)
+                + getPropertiesForScriptParameters()).toReadOnlyList()
+    }
+
+    private fun getPropertiesForScriptParameters() = getPrimaryConstructor()!!.valueParameters.flatMap {
+        getContributedVariables(it.name, NoLookupLocation.FOR_SCRIPT)
+    }
+
+    override fun createPropertiesFromPrimaryConstructorParameters(name: Name, result: MutableSet<PropertyDescriptor>) {
+        val primaryConstructor = getPrimaryConstructor()!!
+        for (valueParameterDescriptor in primaryConstructor.valueParameters) {
+            if (name == valueParameterDescriptor.getName()) {
+                result.add(createPropertyFromScriptParameter(scriptDescriptor, valueParameterDescriptor))
+            }
+        }
+    }
+
+    private fun createPropertyFromScriptParameter(
+            scriptDescriptor: ScriptDescriptor,
+            parameter: ValueParameterDescriptor
+    ): PropertyDescriptor {
+        val propertyDescriptor = PropertyDescriptorImpl.create(
+                scriptDescriptor,
+                Annotations.EMPTY,
+                Modality.FINAL,
+                Visibilities.PUBLIC,
+                false,
+                parameter.getName(),
+                CallableMemberDescriptor.Kind.DECLARATION,
+                SourceElement.NO_SOURCE,
+                /* lateInit = */ false,
+                /* isConst = */ false
+        )
+        propertyDescriptor.setType(
+                parameter.getType(),
+                listOf(),
+                scriptDescriptor.getThisAsReceiverParameter(),
+                null as ReceiverParameterDescriptor?
+        )
+        propertyDescriptor.initialize(null, null)
+        return propertyDescriptor
     }
 }
