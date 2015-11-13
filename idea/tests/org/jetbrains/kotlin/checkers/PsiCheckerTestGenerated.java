@@ -577,9 +577,21 @@ public class PsiCheckerTestGenerated extends AbstractPsiCheckerTest {
             doTest(fileName);
         }
 
+        @TestMetadata("packageStatement.kts")
+        public void testPackageStatement() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/checker/scripts/packageStatement.kts");
+            doTest(fileName);
+        }
+
         @TestMetadata("simple.kts")
         public void testSimple() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("idea/testData/checker/scripts/simple.kts");
+            doTest(fileName);
+        }
+
+        @TestMetadata("uninitializedVariable.kts")
+        public void testUninitializedVariable() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/checker/scripts/uninitializedVariable.kts");
             doTest(fileName);
         }
     }
