@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.resolve.ScriptNameUtil;
 
 import java.util.List;
 
-public class KtScript extends KtDeclarationStub<KotlinScriptStub> implements KtDeclarationContainer {
+public class KtScript extends KtNamedDeclarationStub<KotlinScriptStub> implements KtDeclarationContainer {
 
     public KtScript(@NotNull ASTNode node) {
         super(node);
@@ -37,10 +37,11 @@ public class KtScript extends KtDeclarationStub<KotlinScriptStub> implements KtD
     }
 
     @NotNull
-    public FqName getScriptClassFqName() {
+    @Override
+    public FqName getFqName() {
         KotlinScriptStub stub = getStub();
         if (stub != null) {
-            return stub.getScriptClassFqName();
+            return stub.getFqName();
         }
         return ScriptNameUtil.classNameForScript(this);
     }

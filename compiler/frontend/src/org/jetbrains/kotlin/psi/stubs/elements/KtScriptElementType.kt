@@ -31,11 +31,11 @@ public class KtScriptElementType(debugName: String) : KtStubElementType<KotlinSc
 ) {
 
     override fun createStub(psi: KtScript, parentStub: StubElement<PsiElement>): KotlinScriptStub {
-        return KotlinScriptStubImpl(parentStub, StringRef.fromString(psi.scriptClassFqName.asString()))
+        return KotlinScriptStubImpl(parentStub, StringRef.fromString(psi.fqName.asString()))
     }
 
     override fun serialize(stub: KotlinScriptStub, dataStream: StubOutputStream) {
-        dataStream.writeName(stub.scriptClassFqName.asString())
+        dataStream.writeName(stub.getFqName().asString())
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<PsiElement>): KotlinScriptStub {

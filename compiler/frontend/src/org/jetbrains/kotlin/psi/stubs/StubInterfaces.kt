@@ -125,6 +125,6 @@ public interface KotlinUserTypeStub : StubElement<KtUserType> {
     public fun isAbsoluteInRootPackage(): Boolean
 }
 
-public interface KotlinScriptStub : StubElement<KtScript> {
-    val scriptClassFqName: FqName
+public interface KotlinScriptStub : KotlinStubWithFqName<KtScript> {
+    override fun getFqName(): FqName
 }

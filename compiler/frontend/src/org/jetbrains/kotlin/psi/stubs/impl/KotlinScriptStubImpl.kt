@@ -28,6 +28,7 @@ public class KotlinScriptStubImpl(
         parent: StubElement<out PsiElement>?,
         private val _fqName: StringRef?
 ) : KotlinStubBaseImpl<KtScript>(parent, KtStubElementTypes.SCRIPT), KotlinScriptStub {
-    override val scriptClassFqName: FqName
-        get() = FqName(StringRef.toString(_fqName)!!)
+    override fun getName(): String = getFqName().shortName().asString()
+
+    override fun getFqName(): FqName = FqName(StringRef.toString(_fqName)!!)
 }
