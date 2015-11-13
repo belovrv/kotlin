@@ -66,46 +66,35 @@ public class LazyDeclarationResolver {
 
     @NotNull
     public ClassDescriptor getClassDescriptor(@NotNull KtClassOrObject classOrObject, @NotNull LookupLocation location) {
-        MemberScope scope = getMemberScopeDeclaredIn(classOrObject, location);
+        return findClassDescriptor(classOrObject, location);
+    }
+
+    @NotNull
+    public ScriptDescriptor getScriptDescriptor(@NotNull KtScript script, @NotNull LookupLocation location) {
+        return (ScriptDescriptor) findClassDescriptor(script, location);
+    }
+
+    @NotNull
+    private ClassDescriptor findClassDescriptor(@NotNull KtNamedDeclaration classObjectOrScript, @NotNull LookupLocation location) {
+        MemberScope scope = getMemberScopeDeclaredIn(classObjectOrScript, location);
 
         // Why not use the result here. Because it may be that there is a redeclaration:
         //     class A {} class A { fun foo(): A<completion here>}
         // and if we find the class by name only, we may b-not get the right one.
         // This call is only needed to make sure the classes are written to trace
-        ClassifierDescriptor scopeDescriptor = scope.getContributedClassifier(classOrObject.getNameAsSafeName(), location);
-        DeclarationDescriptor descriptor = getBindingContext().get(BindingContext.DECLARATION_TO_DESCRIPTOR, classOrObject);
-
-        if (descriptor == null) {
-            throw new IllegalArgumentException(
-                   String.format("Could not find a classifier for %s.\n" +
-                                 "Found descriptor: %s (%s).\n",
-                                 PsiUtilsKt.getElementTextWithContext(classOrObject),
-                                 scopeDescriptor != null ? DescriptorRenderer.DEBUG_TEXT.render(scopeDescriptor) : "null",
-                                 scopeDescriptor != null ? (scopeDescriptor.getContainingDeclaration().getClass()) : null));
-        }
-
-        return (ClassDescriptor) descriptor;
-    }
-
-    @NotNull
-    public ScriptDescriptor getScriptDescriptor(@NotNull KtScript script, @NotNull LookupLocation location) {
-        MemberScope scope = getMemberScopeDeclaredIn(script, location);
-
-        //TODO_R:
-        ClassifierDescriptor scopeDescriptor = scope.getContributedClassifier(script.getScriptClassFqName().shortName(), location);
-        DeclarationDescriptor descriptor = getBindingContext().get(BindingContext.SCRIPT, script);
+        ClassifierDescriptor scopeDescriptor = scope.getContributedClassifier(classObjectOrScript.getNameAsSafeName(), location);
+        DeclarationDescriptor descriptor = getBindingContext().get(BindingContext.DECLARATION_TO_DESCRIPTOR, classObjectOrScript);
 
         if (descriptor == null) {
             throw new IllegalArgumentException(
                     String.format("Could not find a classifier for %s.\n" +
                                   "Found descriptor: %s (%s).\n",
-                                  PsiUtilsKt.getElementTextWithContext(script),
+                                  PsiUtilsKt.getElementTextWithContext(classObjectOrScript),
                                   scopeDescriptor != null ? DescriptorRenderer.DEBUG_TEXT.render(scopeDescriptor) : "null",
                                   scopeDescriptor != null ? (scopeDescriptor.getContainingDeclaration().getClass()) : null));
         }
 
-        return (ScriptDescriptor) descriptor;
-
+        return (ClassDescriptor) descriptor;
     }
 
     @NotNull

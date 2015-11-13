@@ -17,7 +17,6 @@
 package org.jetbrains.kotlin.resolve.lazy.descriptors
 
 import org.jetbrains.kotlin.descriptors.*
-import org.jetbrains.kotlin.descriptors.impl.ReceiverParameterDescriptorImpl
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.ScriptPriorities
@@ -25,7 +24,7 @@ import org.jetbrains.kotlin.resolve.lazy.LazyClassContext
 import org.jetbrains.kotlin.resolve.lazy.ResolveSession
 import org.jetbrains.kotlin.resolve.lazy.data.JetScriptInfo
 import org.jetbrains.kotlin.resolve.lazy.declarations.ClassMemberDeclarationProvider
-import org.jetbrains.kotlin.resolve.scopes.receivers.ScriptReceiver
+import org.jetbrains.kotlin.resolve.source.toSourceElement
 import org.jetbrains.kotlin.types.TypeSubstitutor
 
 public class LazyScriptDescriptor(
@@ -42,6 +41,10 @@ public class LazyScriptDescriptor(
     init {
         resolveSession.trace.record(BindingContext.SCRIPT, scriptInfo.script, this)
     }
+
+    private val sourceElement = scriptInfo.script.toSourceElement()
+
+    override fun getSource() = sourceElement
 
     private val priority: Int = ScriptPriorities.getScriptPriority(scriptInfo.script)
 
@@ -65,17 +68,11 @@ public class LazyScriptDescriptor(
         )
     }
 
-    override fun getUnsubstitutedMemberScope(): LazyScriptClassMemberScope {
-        return super.getUnsubstitutedMemberScope() as LazyScriptClassMemberScope
-    }
-
     override fun getVisibility(): Visibility {
         return Visibilities.PUBLIC
     }
 
-    //TODO_R:
     override fun getUnsubstitutedPrimaryConstructor(): ConstructorDescriptor {
         return super.getUnsubstitutedPrimaryConstructor()!!;
     }
-
 }
