@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
 import org.jetbrains.kotlin.resolve.lazy.*
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassDescriptor
+import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyScriptDescriptor
 import org.jetbrains.kotlin.resolve.varianceChecker.VarianceChecker
 import java.util.*
 
@@ -70,6 +71,10 @@ public class LazyTopDownAnalyzer(
                 }
 
                 override fun visitScript(script: KtScript) {
+                    c.getScripts().put(
+                            script,
+                            lazyDeclarationResolver.getScriptDescriptor(script, KotlinLookupLocation(script)) as LazyScriptDescriptor
+                    )
                     registerDeclarations(script.declarations)
                 }
 
