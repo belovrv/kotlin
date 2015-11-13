@@ -20,6 +20,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.name.FqName;
+import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.psi.stubs.KotlinScriptStub;
 import org.jetbrains.kotlin.psi.stubs.elements.KtStubElementTypes;
 import org.jetbrains.kotlin.resolve.ScriptNameUtil;
@@ -44,6 +45,17 @@ public class KtScript extends KtNamedDeclarationStub<KotlinScriptStub> implement
             return stub.getFqName();
         }
         return ScriptNameUtil.classNameForScript(this);
+    }
+
+    @NotNull
+    @Override
+    public Name getNameAsSafeName() {
+        return getFqName().shortName();
+    }
+
+    @Override
+    public Name getNameAsName() {
+        return getFqName().shortName();
     }
 
     @NotNull
