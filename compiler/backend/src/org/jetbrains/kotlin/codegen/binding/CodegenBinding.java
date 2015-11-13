@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.psi.*;
 import org.jetbrains.kotlin.psi.psiUtil.PsiUtilsKt;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.BindingTrace;
+import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils;
 import org.jetbrains.kotlin.util.slicedMap.BasicWritableSlice;
 import org.jetbrains.kotlin.util.slicedMap.Slices;
 import org.jetbrains.kotlin.util.slicedMap.WritableSlice;
@@ -153,9 +154,8 @@ public class CodegenBinding {
             @NotNull Type asmType,
             @NotNull JvmFileClassesProvider fileClassesManager
     ) {
-        //TODO_R:
-        //KtElement element = (KtElement) descriptorToDeclaration(classDescriptor);
-        //assert element != null : "No source element for " + classDescriptor;
+        KtElement element = (KtElement) DescriptorToSourceUtils.descriptorToDeclaration(classDescriptor);
+        assert element != null : "No source element for " + classDescriptor;
 
         MutableClosure closure = new MutableClosure(classDescriptor, enclosing);
 
