@@ -70,28 +70,18 @@ public class LazyTopDownAnalyzer(
                 }
 
                 override fun visitScript(script: KtScript) {
-                    visitKtFile(script.getContainingKtFile())
+                    registerDeclarations(script.declarations)
                 }
 
                 override fun visitKtFile(file: KtFile) {
-                    if (file.isScript()) {
-                        val script = file.getScript() ?: throw AssertionError("getScript() is null for file: $file")
-
-                        DescriptorResolver.registerFileInPackage(trace, file)
-                        registerDeclarations(script.blockExpression.children.filterIsInstance<KtDeclaration>())
-                    }
-                    else {
-                        val packageDirective = file.getPackageDirective()
-                        assert(packageDirective != null) { "No package in a non-script file: " + file }
-
+                    DescriptorResolver.registerFileInPackage(trace, file)
+                    registerDeclarations(file.declarations)
+                    val packageDirective = file.packageDirective
+                    assert(file.isScript || packageDirective != null) { "No package in a non-script file: " + file }
+                    packageDirective?.accept(this)
+                    if (!file.isScript) {
                         c.addFile(file)
-
-                        packageDirective!!.accept(this)
-                        DescriptorResolver.registerFileInPackage(trace, file)
-
-                        registerDeclarations(file.getDeclarations())
-
-                        topLevelFqNames.put(file.getPackageFqName(), packageDirective)
+                        topLevelFqNames.put(file.packageFqName, packageDirective)
                     }
                 }
 
