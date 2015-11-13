@@ -1227,15 +1227,13 @@ public class KotlinExpressionParsing extends AbstractKotlinParsing {
             if (!atSet(EXPRESSION_FIRST)) {
                 errorAndAdvance("Expecting a statement");
             }
-            else {
-                PsiBuilder.Marker scriptInitializer = null;
-                if (isScriptTopLevel) {
-                    scriptInitializer = mark();
-                }
+            else if (isScriptTopLevel){
+                PsiBuilder.Marker scriptInitializer = mark();
                 parseExpression();
-                if (scriptInitializer != null) {
-                    scriptInitializer.done(ANONYMOUS_INITIALIZER);
-                }
+                scriptInitializer.done(ANONYMOUS_INITIALIZER);
+            }
+            else {
+                parseExpression();
             }
         }
     }

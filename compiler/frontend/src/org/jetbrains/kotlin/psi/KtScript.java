@@ -47,6 +47,7 @@ public class KtScript extends KtNamedDeclarationStub<KotlinScriptStub> implement
         return ScriptNameUtil.classNameForScript(this);
     }
 
+    //TODO_R: should we override?
     @NotNull
     @Override
     public Name getNameAsSafeName() {

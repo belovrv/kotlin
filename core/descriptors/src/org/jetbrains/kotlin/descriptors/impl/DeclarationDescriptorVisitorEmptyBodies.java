@@ -63,6 +63,7 @@ public class DeclarationDescriptorVisitorEmptyBodies<R, D> implements Declaratio
         return visitFunctionDescriptor(constructorDescriptor, data);
     }
 
+    //TODO_R: visitClass
     @Override
     public R visitScriptDescriptor(ScriptDescriptor scriptDescriptor, D data) {
         return visitDeclarationDescriptor(scriptDescriptor, data);

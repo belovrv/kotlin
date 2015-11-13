@@ -61,13 +61,16 @@ public class KtClassInitializer extends KtDeclarationStub<KotlinPlaceHolderStub<
         return findChildByType(KtTokens.INIT_KEYWORD);
     }
 
+    //TODO_R:
     @NotNull
-    public KtDeclaration getDeclaration() {
+    public KtDeclaration getContainingDeclaration() {
         KtClassOrObject classOrObject = PsiTreeUtil.getParentOfType(this, KtClassOrObject.class, true);
         if (classOrObject != null) {
             return classOrObject;
         }
-        //TODO_R:
-        return PsiTreeUtil.getParentOfType(this, KtScript.class, true);
+        KtScript type = PsiTreeUtil.getParentOfType(this, KtScript.class, true);
+        //TODO_R: message
+        assert type != null : "";
+        return type;
     }
 }

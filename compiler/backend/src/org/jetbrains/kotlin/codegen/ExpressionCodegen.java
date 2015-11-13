@@ -47,7 +47,6 @@ import org.jetbrains.kotlin.codegen.state.JetTypeMapper;
 import org.jetbrains.kotlin.codegen.when.SwitchCodegen;
 import org.jetbrains.kotlin.codegen.when.SwitchCodegenUtil;
 import org.jetbrains.kotlin.descriptors.*;
-import org.jetbrains.kotlin.descriptors.impl.ScriptCodeDescriptor;
 import org.jetbrains.kotlin.descriptors.impl.SyntheticFieldDescriptor;
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils;
 import org.jetbrains.kotlin.diagnostics.Errors;
@@ -359,11 +358,8 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
 
     @Override
     public StackValue visitAnonymousInitializer(@NotNull KtClassInitializer initializer, StackValue data) {
-        if (initializer.getDeclaration() instanceof KtScript) {
-            KtExpression body = initializer.getBody();
-            if (body != null) {
-                return body.accept(this, data);
-            }
+        if (initializer.getContainingDeclaration() instanceof KtScript) {
+            return StackValue.none();
         }
         return super.visitAnonymousInitializer(initializer, data);
     }

@@ -163,6 +163,7 @@ class CodegenAnnotatingVisitor extends KtVisitorVoid {
         if (file.isScript()) {
             // TODO: replace with visitScript override
             //noinspection ConstantConditions
+            //TODO_R: fix upper TODO
             classStack.push(bindingContext.get(SCRIPT, file.getScript()));
             //noinspection ConstantConditions
             nameStack.push(asmTypeForScriptPsi(bindingContext, file.getScript()).getInternalName());

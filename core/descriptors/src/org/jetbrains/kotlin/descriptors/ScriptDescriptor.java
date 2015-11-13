@@ -17,11 +17,8 @@
 package org.jetbrains.kotlin.descriptors;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.kotlin.name.Name;
 
 public interface ScriptDescriptor extends ClassDescriptor {
-    Name NAME = Name.special("<script>");
-
     int getPriority();
 
     @NotNull

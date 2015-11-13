@@ -245,6 +245,7 @@ public class ResolveSession implements KotlinCodeAnalyzer, LazyClassContext {
                 new Function<JetClassLikeInfo, ClassDescriptor>() {
                     @Override
                     public ClassDescriptor fun(JetClassLikeInfo classLikeInfo) {
+                        //TODO_R: why not scripts?
                         KtClassOrObject classOrObject = classLikeInfo.getCorrespondingClassOrObject();
                         if (classOrObject == null) return null;
                         return getClassDescriptor(classOrObject, location);

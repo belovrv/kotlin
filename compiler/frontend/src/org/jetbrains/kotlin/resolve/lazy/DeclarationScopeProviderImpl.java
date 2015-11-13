@@ -72,6 +72,7 @@ public class DeclarationScopeProviderImpl implements DeclarationScopeProvider {
 
             return classDescriptor.getScopeForMemberDeclarationResolution();
         }
+        //TODO_R:
         if (parentDeclaration instanceof KtScript) {
             LazyScriptDescriptor scriptDescriptor = (LazyScriptDescriptor) lazyDeclarationResolver.resolveToDescriptor(parentDeclaration);
             return scriptDescriptor.getScopeForInitializerResolution();

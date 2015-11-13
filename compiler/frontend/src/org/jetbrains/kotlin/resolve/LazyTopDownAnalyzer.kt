@@ -85,6 +85,7 @@ public class LazyTopDownAnalyzer(
                     assert(file.isScript || packageDirective != null) { "No package in a non-script file: " + file }
                     packageDirective?.accept(this)
                     if (!file.isScript) {
+                        //TODO_R: for scripts too and test
                         c.addFile(file)
                         topLevelFqNames.put(file.packageFqName, packageDirective)
                     }
@@ -157,8 +158,8 @@ public class LazyTopDownAnalyzer(
                 }
 
                 override fun visitAnonymousInitializer(initializer: KtClassInitializer) {
-                    val classOrObject: KtDeclaration = PsiTreeUtil.getParentOfType<KtClassOrObject>(initializer, javaClass<KtClassOrObject>()) ?: PsiTreeUtil.getParentOfType<KtScript>(initializer, javaClass<KtScript>())!!
-                    c.getAnonymousInitializers().put(initializer, lazyDeclarationResolver.resolveToDescriptor(classOrObject) as ClassDescriptorWithResolutionScopes)
+                    val containerDescriptor = lazyDeclarationResolver.resolveToDescriptor(initializer.containingDeclaration) as ClassDescriptorWithResolutionScopes
+                    c.getAnonymousInitializers().put(initializer, containerDescriptor)
                 }
 
                 override fun visitTypedef(typedef: KtTypedef) {

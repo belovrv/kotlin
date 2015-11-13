@@ -68,11 +68,8 @@ public class LazyScriptDescriptor(
         )
     }
 
-    override fun getVisibility(): Visibility {
-        return Visibilities.PUBLIC
-    }
+    //TODO_R: why only visibility?
+    override fun getVisibility() = Visibilities.PUBLIC
 
-    override fun getUnsubstitutedPrimaryConstructor(): ConstructorDescriptor {
-        return super.getUnsubstitutedPrimaryConstructor()!!;
-    }
+    override fun getUnsubstitutedPrimaryConstructor() = super.getUnsubstitutedPrimaryConstructor()!!
 }

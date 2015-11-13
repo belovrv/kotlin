@@ -166,6 +166,7 @@ public class JetTypeMapper {
             String packageMemberOwner = internalNameForPackageMemberOwner((CallableMemberDescriptor) descriptor, publicFacade);
             return Type.getObjectType(packageMemberOwner);
         }
+        //TODO_R: drop these and check
         else if (container instanceof ScriptDescriptor) {
             return asmTypeForScriptDescriptor(bindingContext, (ScriptDescriptor) container);
         }

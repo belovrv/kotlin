@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.descriptors.ScriptDescriptor;
 import org.jetbrains.kotlin.resolve.descriptorUtil.DescriptorUtilsKt;
 import org.jetbrains.kotlin.types.KotlinType;
 
+//TODO_R: drop
 public class ScriptReceiver implements ThisReceiver {
     private final ScriptDescriptor scriptDescriptor;
 
