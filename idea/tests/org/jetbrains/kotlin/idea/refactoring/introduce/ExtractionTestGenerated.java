@@ -193,6 +193,18 @@ public class ExtractionTestGenerated extends AbstractExtractionTest {
             doIntroduceVariableTest(fileName);
         }
 
+        @TestMetadata("insideLamba.kt")
+        public void testInsideLamba() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/refactoring/introduceVariable/insideLamba.kt");
+            doIntroduceVariableTest(fileName);
+        }
+
+        @TestMetadata("insideNestedLamba.kt")
+        public void testInsideNestedLamba() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/refactoring/introduceVariable/insideNestedLamba.kt");
+            doIntroduceVariableTest(fileName);
+        }
+
         @TestMetadata("InsideOfInitializerAnnotation.kt")
         public void testInsideOfInitializerAnnotation() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("idea/testData/refactoring/introduceVariable/InsideOfInitializerAnnotation.kt");
@@ -214,6 +226,12 @@ public class ExtractionTestGenerated extends AbstractExtractionTest {
         @TestMetadata("It.kt")
         public void testIt() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("idea/testData/refactoring/introduceVariable/It.kt");
+            doIntroduceVariableTest(fileName);
+        }
+
+        @TestMetadata("itInsideNestedLamba.kt")
+        public void testItInsideNestedLamba() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/refactoring/introduceVariable/itInsideNestedLamba.kt");
             doIntroduceVariableTest(fileName);
         }
 
@@ -304,6 +322,12 @@ public class ExtractionTestGenerated extends AbstractExtractionTest {
         @TestMetadata("OneExplicitReceiver.kt")
         public void testOneExplicitReceiver() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("idea/testData/refactoring/introduceVariable/OneExplicitReceiver.kt");
+            doIntroduceVariableTest(fileName);
+        }
+
+        @TestMetadata("outerItInsideNestedLamba.kt")
+        public void testOuterItInsideNestedLamba() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/refactoring/introduceVariable/outerItInsideNestedLamba.kt");
             doIntroduceVariableTest(fileName);
         }
 

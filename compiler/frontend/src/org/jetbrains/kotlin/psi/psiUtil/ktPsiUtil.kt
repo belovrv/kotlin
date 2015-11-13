@@ -422,3 +422,5 @@ public fun KtExpression.getOutermostParenthesizerOrThis(): KtExpression {
         }
     }?.first as KtExpression? ?: this
 }
+
+public fun PsiElement.isLambdaBlock(): Boolean = this is KtBlockExpression && parent is KtFunctionLiteral
