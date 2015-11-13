@@ -134,7 +134,13 @@ class LookupElementsCollector(
     // used to avoid insertion of spaces before/after ',', '=' on just typing
     private fun isJustTyping(context: InsertionContext, element: LookupElement): Boolean {
         if (!completionParameters.isAutoPopup()) return false
-        val insertedText = context.getDocument().getText(TextRange(context.getStartOffset(), context.getTailOffset()))
+
+        val startOffset = context.getStartOffset()
+        val tailOffset = context.getTailOffset()
+
+        if (startOffset < 0) return false
+
+        val insertedText = context.getDocument().getText(TextRange(startOffset, tailOffset))
         return insertedText == element.getUserDataDeep(KotlinCompletionCharFilter.JUST_TYPING_PREFIX)
     }
 
