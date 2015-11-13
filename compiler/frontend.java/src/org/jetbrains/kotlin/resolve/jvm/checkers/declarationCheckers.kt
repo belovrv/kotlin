@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.annotations.hasIntrinsicAnnotation
 import org.jetbrains.kotlin.resolve.annotations.hasJvmStaticAnnotation
+import org.jetbrains.kotlin.resolve.descriptorUtil.isExtension
 import org.jetbrains.kotlin.resolve.inline.InlineUtil
 import org.jetbrains.kotlin.resolve.jvm.annotations.hasJvmOverloadsAnnotation
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.ErrorsJvm
@@ -240,6 +241,32 @@ public class ReifiedTypeParameterAnnotationChecker : DeclarationChecker {
                             typeParameterDeclaration.getModifierList()!!.getModifier(KtTokens.REIFIED_KEYWORD)!!
                     )
             )
+        }
+    }
+}
+
+public class EnumNameOrdinalOverloadChecker : DeclarationChecker {
+    override fun check(
+            declaration: KtDeclaration,
+            descriptor: DeclarationDescriptor,
+            diagnosticHolder: DiagnosticSink,
+            bindingContext: BindingContext) {
+
+        val containingDeclaration = descriptor.containingDeclaration
+        if (containingDeclaration is ClassDescriptor &&
+            containingDeclaration.kind == ClassKind.ENUM_CLASS &&
+            descriptor is FunctionDescriptor &&
+            !descriptor.isExtension &&
+            descriptor.valueParameters.isEmpty()) {
+            val returnType = descriptor.returnType ?: return
+
+            val name = descriptor.name.asString()
+            when {
+                name == "name" && KotlinBuiltIns.isString(returnType) ->
+                    diagnosticHolder.report(ErrorsJvm.ENUM_NAME_ORDINAL_CLASH.on(declaration));
+                name == "ordinal" && KotlinBuiltIns.isInt(returnType) ->
+                    diagnosticHolder.report(ErrorsJvm.ENUM_NAME_ORDINAL_CLASH.on(declaration));
+            }
         }
     }
 }

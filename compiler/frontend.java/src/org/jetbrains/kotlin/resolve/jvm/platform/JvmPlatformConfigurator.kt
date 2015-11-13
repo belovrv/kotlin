@@ -38,7 +38,8 @@ public object JvmPlatformConfigurator : PlatformConfigurator(
                 NativeFunChecker(),
                 OverloadsAnnotationChecker(),
                 JvmFieldApplicabilityChecker(),
-                TypeParameterBoundIsNotArrayChecker()
+                TypeParameterBoundIsNotArrayChecker(),
+                EnumNameOrdinalOverloadChecker()
         ),
 
         additionalCallCheckers = listOf(
