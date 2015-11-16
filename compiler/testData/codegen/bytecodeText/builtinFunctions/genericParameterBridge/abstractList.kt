@@ -26,3 +26,4 @@ abstract class A6 : java.util.AbstractList<String>() {
 // 2 public final bridge remove\(Ljava/lang/Object;\)Z
 // 2 public final bridge indexOf\(Ljava/lang/Object;\)I
 // 2 public final bridge lastIndexOf\(Ljava/lang/Object;\)I
+// 8 INSTANCEOF java/lang/String

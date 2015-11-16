@@ -22,3 +22,4 @@ abstract class A : I2
 
 // 1 public final bridge contains\(Ljava/lang/Object;\)Z
 // 1 public final bridge remove\(Ljava/lang/Object;\)Z
+// 2 INSTANCEOF java/lang/String
