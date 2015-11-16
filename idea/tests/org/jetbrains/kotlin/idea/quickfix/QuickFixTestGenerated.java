@@ -233,6 +233,111 @@ public class QuickFixTestGenerated extends AbstractQuickFixTest {
         }
     }
 
+    @TestMetadata("idea/testData/quickfix/addInitializer")
+    @TestDataPath("$PROJECT_ROOT")
+    @RunWith(JUnit3RunnerWithInners.class)
+    public static class AddInitializer extends AbstractQuickFixTest {
+        public void testAllFilesPresentInAddInitializer() throws Exception {
+            KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("idea/testData/quickfix/addInitializer"), Pattern.compile("^([\\w\\-_]+)\\.kt$"), true);
+        }
+
+        @TestMetadata("localVar.kt")
+        public void testLocalVar() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/localVar.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberExtensionProperty.kt")
+        public void testMemberExtensionProperty() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/memberExtensionProperty.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberExtensionPropertyVarGetterOnly.kt")
+        public void testMemberExtensionPropertyVarGetterOnly() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/memberExtensionPropertyVarGetterOnly.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberExtensionPropertyVarSetterOnly.kt")
+        public void testMemberExtensionPropertyVarSetterOnly() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/memberExtensionPropertyVarSetterOnly.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberProperty.kt")
+        public void testMemberProperty() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/memberProperty.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyVarGetterOnly.kt")
+        public void testMemberPropertyVarGetterOnly() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/memberPropertyVarGetterOnly.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyVarSetterOnly.kt")
+        public void testMemberPropertyVarSetterOnly() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/memberPropertyVarSetterOnly.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyWithAccessor.kt")
+        public void testMemberPropertyWithAccessor() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/memberPropertyWithAccessor.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyWithDelegateRuntime.kt")
+        public void testMemberPropertyWithDelegateRuntime() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/memberPropertyWithDelegateRuntime.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("topLevelExtensionProperty.kt")
+        public void testTopLevelExtensionProperty() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/topLevelExtensionProperty.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("topLevelExtensionPropertySetterOnly.kt")
+        public void testTopLevelExtensionPropertySetterOnly() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/topLevelExtensionPropertySetterOnly.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("topLevelProperty.kt")
+        public void testTopLevelProperty() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/topLevelProperty.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("topLevelPropertyVarGetterOnly.kt")
+        public void testTopLevelPropertyVarGetterOnly() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/topLevelPropertyVarGetterOnly.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("topLevelPropertyVarSetterOnly.kt")
+        public void testTopLevelPropertyVarSetterOnly() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/topLevelPropertyVarSetterOnly.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("topLevelPropertyWithDelegateRuntime.kt")
+        public void testTopLevelPropertyWithDelegateRuntime() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/topLevelPropertyWithDelegateRuntime.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("topLevelPropertyWithGetter.kt")
+        public void testTopLevelPropertyWithGetter() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addInitializer/topLevelPropertyWithGetter.kt");
+            doTest(fileName);
+        }
+    }
+
     @TestMetadata("idea/testData/quickfix/addStarProjections")
     @TestDataPath("$PROJECT_ROOT")
     @RunWith(JUnit3RunnerWithInners.class)
@@ -4188,6 +4293,99 @@ public class QuickFixTestGenerated extends AbstractQuickFixTest {
         }
     }
 
+    @TestMetadata("idea/testData/quickfix/initializeWithConstructorParameter")
+    @TestDataPath("$PROJECT_ROOT")
+    @RunWith(JUnit3RunnerWithInners.class)
+    public static class InitializeWithConstructorParameter extends AbstractQuickFixTest {
+        public void testAllFilesPresentInInitializeWithConstructorParameter() throws Exception {
+            KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("idea/testData/quickfix/initializeWithConstructorParameter"), Pattern.compile("^([\\w\\-_]+)\\.kt$"), true);
+        }
+
+        @TestMetadata("localVar.kt")
+        public void testLocalVar() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/initializeWithConstructorParameter/localVar.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyInClassNameClashInPrimaryConstructor.kt")
+        public void testMemberPropertyInClassNameClashInPrimaryConstructor() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/initializeWithConstructorParameter/memberPropertyInClassNameClashInPrimaryConstructor.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyInClassNameClashInSecondaryConstructor.kt")
+        public void testMemberPropertyInClassNameClashInSecondaryConstructor() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/initializeWithConstructorParameter/memberPropertyInClassNameClashInSecondaryConstructor.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyInClassNoConstructors.kt")
+        public void testMemberPropertyInClassNoConstructors() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/initializeWithConstructorParameter/memberPropertyInClassNoConstructors.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyInClassPrimaryAndSecondaryConstructors.kt")
+        public void testMemberPropertyInClassPrimaryAndSecondaryConstructors() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/initializeWithConstructorParameter/memberPropertyInClassPrimaryAndSecondaryConstructors.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyInClassPrimaryConstructorOnly.kt")
+        public void testMemberPropertyInClassPrimaryConstructorOnly() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/initializeWithConstructorParameter/memberPropertyInClassPrimaryConstructorOnly.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyInClassSecondaryConstructorsOnly.kt")
+        public void testMemberPropertyInClassSecondaryConstructorsOnly() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/initializeWithConstructorParameter/memberPropertyInClassSecondaryConstructorsOnly.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyInInterface.kt")
+        public void testMemberPropertyInInterface() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/initializeWithConstructorParameter/memberPropertyInInterface.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyInObject.kt")
+        public void testMemberPropertyInObject() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/initializeWithConstructorParameter/memberPropertyInObject.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyNoAccessorsInClassNoConstructors.kt")
+        public void testMemberPropertyNoAccessorsInClassNoConstructors() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/initializeWithConstructorParameter/memberPropertyNoAccessorsInClassNoConstructors.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyNoAccessorsInClassPrimaryAndSecondaryConstructors.kt")
+        public void testMemberPropertyNoAccessorsInClassPrimaryAndSecondaryConstructors() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/initializeWithConstructorParameter/memberPropertyNoAccessorsInClassPrimaryAndSecondaryConstructors.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyNoAccessorsInClassPrimaryConstructorOnly.kt")
+        public void testMemberPropertyNoAccessorsInClassPrimaryConstructorOnly() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/initializeWithConstructorParameter/memberPropertyNoAccessorsInClassPrimaryConstructorOnly.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyWithDelegateRuntime.kt")
+        public void testMemberPropertyWithDelegateRuntime() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/initializeWithConstructorParameter/memberPropertyWithDelegateRuntime.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("topLevelProperty.kt")
+        public void testTopLevelProperty() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/initializeWithConstructorParameter/topLevelProperty.kt");
+            doTest(fileName);
+        }
+    }
+
     @TestMetadata("idea/testData/quickfix/insertDelegationCall")
     @TestDataPath("$PROJECT_ROOT")
     @RunWith(JUnit3RunnerWithInners.class)
@@ -4816,6 +5014,87 @@ public class QuickFixTestGenerated extends AbstractQuickFixTest {
 
                 }
             }
+        }
+    }
+
+    @TestMetadata("idea/testData/quickfix/moveToConstructorParameters")
+    @TestDataPath("$PROJECT_ROOT")
+    @RunWith(JUnit3RunnerWithInners.class)
+    public static class MoveToConstructorParameters extends AbstractQuickFixTest {
+        public void testAllFilesPresentInMoveToConstructorParameters() throws Exception {
+            KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("idea/testData/quickfix/moveToConstructorParameters"), Pattern.compile("^([\\w\\-_]+)\\.kt$"), true);
+        }
+
+        @TestMetadata("localVar.kt")
+        public void testLocalVar() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/moveToConstructorParameters/localVar.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberExtensionProperty.kt")
+        public void testMemberExtensionProperty() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/moveToConstructorParameters/memberExtensionProperty.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyInClassNameClash.kt")
+        public void testMemberPropertyInClassNameClash() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/moveToConstructorParameters/memberPropertyInClassNameClash.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyInClassNoPrimaryConstructor.kt")
+        public void testMemberPropertyInClassNoPrimaryConstructor() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/moveToConstructorParameters/memberPropertyInClassNoPrimaryConstructor.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyInClassWithConstructorDelegatingToSuper.kt")
+        public void testMemberPropertyInClassWithConstructorDelegatingToSuper() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/moveToConstructorParameters/memberPropertyInClassWithConstructorDelegatingToSuper.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyInClassWithImplicitlyDelegatingConstructor.kt")
+        public void testMemberPropertyInClassWithImplicitlyDelegatingConstructor() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/moveToConstructorParameters/memberPropertyInClassWithImplicitlyDelegatingConstructor.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyInClassWithPrimaryConstructor.kt")
+        public void testMemberPropertyInClassWithPrimaryConstructor() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/moveToConstructorParameters/memberPropertyInClassWithPrimaryConstructor.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyInInterface.kt")
+        public void testMemberPropertyInInterface() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/moveToConstructorParameters/memberPropertyInInterface.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyInObject.kt")
+        public void testMemberPropertyInObject() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/moveToConstructorParameters/memberPropertyInObject.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("memberPropertyWithDelegateRuntime.kt")
+        public void testMemberPropertyWithDelegateRuntime() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/moveToConstructorParameters/memberPropertyWithDelegateRuntime.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("propertyWithModifiersAndComments.kt")
+        public void testPropertyWithModifiersAndComments() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/moveToConstructorParameters/propertyWithModifiersAndComments.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("topLevelProperty.kt")
+        public void testTopLevelProperty() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/moveToConstructorParameters/topLevelProperty.kt");
+            doTest(fileName);
         }
     }
 
