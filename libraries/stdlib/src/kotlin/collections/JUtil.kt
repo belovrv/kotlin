@@ -22,12 +22,12 @@ internal object EmptyList : List<Nothing>, Serializable {
 
     override val size: Int get() = 0
     override fun isEmpty(): Boolean = true
-    override fun contains(o: Nothing): Boolean = false
-    override fun containsAll(c: Collection<Nothing>): Boolean = c.isEmpty()
+    override fun contains(element: Nothing): Boolean = false
+    override fun containsAll(elements: Collection<Nothing>): Boolean = elements.isEmpty()
 
     override fun get(index: Int): Nothing = throw IndexOutOfBoundsException("Index $index is out of bound of empty list.")
-    override fun indexOf(o: Nothing): Int = -1
-    override fun lastIndexOf(o: Nothing): Int = -1
+    override fun indexOf(element: Nothing): Int = -1
+    override fun lastIndexOf(element: Nothing): Int = -1
 
     override fun iterator(): Iterator<Nothing> = EmptyIterator
     override fun listIterator(): ListIterator<Nothing> = EmptyIterator
@@ -49,8 +49,8 @@ internal fun <T> Array<out T>.asCollection(): Collection<T> = ArrayAsCollection(
 private class ArrayAsCollection<T>(val values: Array<out T>): Collection<T> {
     override val size: Int get() = values.size
     override fun isEmpty(): Boolean = values.isEmpty()
-    override fun contains(o: T): Boolean = values.contains(o)
-    override fun containsAll(c: Collection<T>): Boolean = c.all { contains(it) }
+    override fun contains(element: T): Boolean = values.contains(element)
+    override fun containsAll(elements: Collection<T>): Boolean = elements.all { contains(it) }
     override fun iterator(): Iterator<T> = values.iterator()
     // override hidden toArray implementation to prevent copying of values array
     public fun toArray(): Array<out Any?> = values.varargToArrayOfAny()
