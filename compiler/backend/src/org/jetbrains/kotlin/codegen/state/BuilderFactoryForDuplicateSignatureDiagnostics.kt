@@ -167,6 +167,11 @@ class BuilderFactoryForDuplicateSignatureDiagnostics(
                     .forEach(::processMember)
         }
 
+        if (descriptor.kind == ClassKind.ENUM_CLASS || descriptor.kind == ClassKind.ENUM_ENTRY) {
+            groupedBySignature.putValue(RawSignature("name", "()Ljava/lang/String;", MemberKind.METHOD), JvmDeclarationOrigin.NO_ORIGIN)
+            groupedBySignature.putValue(RawSignature("ordinal", "()I", MemberKind.METHOD), JvmDeclarationOrigin.NO_ORIGIN)
+        }
+
         return groupedBySignature
     }
 

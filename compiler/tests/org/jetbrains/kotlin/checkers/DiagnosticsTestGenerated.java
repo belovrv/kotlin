@@ -5502,6 +5502,12 @@ public class DiagnosticsTestGenerated extends AbstractDiagnosticsTest {
                 doTest(fileName);
             }
 
+            @TestMetadata("enumNameOrdinalMethods.kt")
+            public void testEnumNameOrdinalMethods() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/enum/enumNameOrdinalMethods.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("enumStarImport.kt")
             public void testEnumStarImport() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/enum/enumStarImport.kt");
