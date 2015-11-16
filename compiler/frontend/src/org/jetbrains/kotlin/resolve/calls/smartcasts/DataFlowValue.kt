@@ -45,7 +45,7 @@ class DataFlowValue(val id: Any?, val type: KotlinType, val kind: DataFlowValue.
         UNPREDICTABLE_VARIABLE("unpredictable", "local variable that is captured by a changing closure"),
         // Member variable regardless of its visibility
         // Smart casts are not safe
-        MUTABLE_PROPERTY("member", "mutable property"),
+        MUTABLE_PROPERTY("member", "mutable property that could have been changed by this time"),
         // Some complex expression
         // Smart casts are not safe
         OTHER("other", "complex expression");
