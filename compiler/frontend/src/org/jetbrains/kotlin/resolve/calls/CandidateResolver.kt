@@ -49,7 +49,6 @@ import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.TypeUtils.noExpectedType
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
-import org.jetbrains.kotlin.types.expressions.ExpressionTypingUtils
 import java.util.*
 
 public class CandidateResolver(
@@ -169,9 +168,7 @@ public class CandidateResolver(
             }
 
     private fun CallCandidateResolutionContext<*>.checkVisibility() = checkAndReport {
-        val receiverValue = ExpressionTypingUtils.normalizeReceiverValueForVisibility(candidateCall.getDispatchReceiver(),
-                                                                                      trace.getBindingContext())
-        val invisibleMember = Visibilities.findInvisibleMember(receiverValue, candidateDescriptor, scope.ownerDescriptor)
+        val invisibleMember = Visibilities.findInvisibleMember(candidateCall.dispatchReceiver, candidateDescriptor, scope.ownerDescriptor)
         if (invisibleMember != null) {
             tracing.invisibleMember(trace, invisibleMember)
             OTHER_ERROR
@@ -285,7 +282,7 @@ public class CandidateResolver(
 
     private fun getReceiverSuper(receiver: ReceiverValue): KtSuperExpression? {
         if (receiver is ExpressionReceiver) {
-            val expression = receiver.getExpression()
+            val expression = receiver.expression
             if (expression is KtSuperExpression) {
                 return expression
             }
@@ -364,7 +361,7 @@ public class CandidateResolver(
             expectedType: KotlinType,
             actualType: KotlinType,
             context: ResolutionContext<*>): KotlinType? {
-        val receiverToCast = ExpressionReceiver(KtPsiUtil.safeDeparenthesize(expression), actualType)
+        val receiverToCast = ExpressionReceiver.create(KtPsiUtil.safeDeparenthesize(expression), actualType, context.trace.bindingContext)
         val variants = smartCastManager.getSmartCastVariantsExcludingReceiver(context, receiverToCast)
         for (possibleType in variants) {
             if (KotlinTypeChecker.DEFAULT.isSubtypeOf(possibleType, expectedType)) {

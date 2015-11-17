@@ -99,12 +99,9 @@ public class TaskPrioritizer(
             qualifierReceiver: QualifierReceiver,
             taskPrioritizerContext: TaskPrioritizerContext<D, F>
     ) {
-        val classObjectReceiver = qualifierReceiver.getClassObjectReceiver()
-        if (!classObjectReceiver.exists()) {
-            return
-        }
+        val companionObject = qualifierReceiver.companionObjectReceiver ?: return
         val classifierDescriptor = qualifierReceiver.classifier
-        doComputeTasks(classObjectReceiver, taskPrioritizerContext.filterCollectors {
+        doComputeTasks(companionObject, taskPrioritizerContext.filterCollectors {
             when {
                 classifierDescriptor is ClassDescriptor && classifierDescriptor.getCompanionObjectDescriptor() != null -> {
                     // nested classes and objects should not be accessible via short reference to companion object
@@ -238,7 +235,7 @@ public class TaskPrioritizer(
 
                     val dispatchReceiver =
                             if (explicitReceiver.value is ClassReceiver && type != explicitReceiver.value.type) {
-                                CastClassReceiver(explicitReceiver.value.declarationDescriptor, type)
+                                CastClassReceiver(explicitReceiver.value.classDescriptor, type)
                             }
                             else {
                                 explicitReceiver.value
@@ -488,8 +485,7 @@ public class TaskPrioritizer(
             if (candidate == null) return false
             val candidateDescriptor = candidate.getDescriptor()
             if (ErrorUtils.isError(candidateDescriptor)) return true
-            val receiverValue = ExpressionTypingUtils.normalizeReceiverValueForVisibility(candidate.getDispatchReceiver(), context.trace.getBindingContext())
-            return Visibilities.isVisible(receiverValue, candidateDescriptor, context.scope.ownerDescriptor)
+            return Visibilities.isVisible(candidate.dispatchReceiver, candidateDescriptor, context.scope.ownerDescriptor)
         }
 
         private fun hasLowPriority(candidate: ResolutionCandidate<D>?): Boolean {
